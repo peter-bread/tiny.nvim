@@ -1,2 +1,4 @@
-.lazydev_*
+.env
 .mise.local.toml
+
+.lazydev_*
