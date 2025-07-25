@@ -70,7 +70,17 @@ vim.cmd.colorscheme "kanagawa"
 
 -- oil.nvim (file explorer) --------------------------------------------------------------------------------------------
 
-require "oil" .setup {}
+require "oil" .setup {
+  columns = {
+    "icon",
+    "permissions",
+    "size",
+    "mtime",
+  },
+  view_options = {
+    show_hidden = true,
+  },
+}
 vim.keymap.set("n", "-", "<cmd>Oil<cr>")
 
 -- nvim-treesitter (treesitter parser management) ----------------------------------------------------------------------
@@ -105,7 +115,7 @@ local lsp_servers = {
   "lua_ls",
 }
 
--- TODO: maybe move to after/lsp
+-- TODO: maybe move to after/lsp or .nvim/lsp since this is nvim specific settings
 vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
