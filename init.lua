@@ -1,7 +1,7 @@
 -- 1. OPTIONS ==========================================================================================================
 
-vim.o.number = true
-vim.o.relativenumber = true
+vim.o.number          = true
+vim.o.relativenumber  = true
 
 vim.o.autoindent      = true      -- copy indent from current line when starting a new line
 vim.o.smartindent     = true      -- do smart autoindenting when starting a new line
