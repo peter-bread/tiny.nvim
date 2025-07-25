@@ -1,4 +1,4 @@
--- OPTIONS =============================================================================================================
+-- 1. OPTIONS ==========================================================================================================
 
 vim.o.number = true
 vim.o.relativenumber = true
@@ -20,7 +20,8 @@ vim.o.cursorline      = true
 vim.o.signcolumn      = "yes"
 vim.o.statuscolumn    = "%=%{v:relnum == 0 ? v:lnum : v:relnum} %s"
 
--- PLUGIN INSTALLATION =================================================================================================
+
+-- 2. PLUGIN INSTALLATION ==============================================================================================
 
 -- vim.api.nvim_create_autocmd("PackChanged", {
 --   callback = function(ev)
@@ -33,15 +34,22 @@ vim.o.statuscolumn    = "%=%{v:relnum == 0 ? v:lnum : v:relnum} %s"
 -- })
 
 vim.pack.add {
+  -- appearance
   "https://github.com/rebelot/kanagawa.nvim",
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
-  "https://github.com/neovim/nvim-lspconfig",
+  -- "https://github.com/echasnovski/mini.icons",
+
+  -- navigation
   "https://github.com/stevearc/oil.nvim",
+  -- "https://github.com/ibhagwan/fzf-lua",
+
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+  "https://github.com/neovim/nvim-lspconfig", -- data only
 }
 
--- PLUGIN SETUP ========================================================================================================
 
--- kanagawa.nvim (colorscheme) -----------------------------------------------------------------------------------------
+-- 3. PLUGIN SETUP =====================================================================================================
+
+-- 3.a. kanagawa.nvim (colorscheme) ------------------------------------------------------------------------------------
 
 require "kanagawa" .setup {
   colors = {
@@ -68,7 +76,8 @@ require "kanagawa" .setup {
 }
 vim.cmd.colorscheme "kanagawa"
 
--- oil.nvim (file explorer) --------------------------------------------------------------------------------------------
+
+-- 3.b. oil.nvim (file explorer) ---------------------------------------------------------------------------------------
 
 require "oil" .setup {
   columns = {
@@ -81,9 +90,11 @@ require "oil" .setup {
     show_hidden = true,
   },
 }
-vim.keymap.set("n", "-", "<cmd>Oil<cr>")
 
--- nvim-treesitter (treesitter parser management) ----------------------------------------------------------------------
+vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Parent Dir" })
+
+
+-- 3.c. nvim-treesitter (treesitter parser management) -----------------------------------------------------------------
 
 local ts_parsers = {
   "c",
@@ -108,7 +119,8 @@ vim.api.nvim_create_autocmd("FileType", { -- enable treesitter highlighting and 
   end
 })
 
--- LSP =================================================================================================================
+
+-- 4. LSP ==============================================================================================================
 
 -- LSP servers to enable
 local lsp_servers = {
