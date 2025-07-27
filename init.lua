@@ -37,6 +37,12 @@ vim.o.signcolumn      = "yes"
 vim.o.statuscolumn    = "%=%{v:relnum == 0 ? v:lnum : v:relnum} %s"
 
 
+
+vim.o.list            = true      -- show invisible characters (e.g. trailing spaces)
+
+vim.o.exrc            = true
+
+
 -- 2. PLUGIN INSTALLATION ==============================================================================================
 
 -- vim.api.nvim_create_autocmd("PackChanged", {
