@@ -22,6 +22,11 @@ vim.o.tabstop         = 2         -- number of spaces tabs count for
 vim.o.smarttab        = true      -- a <Tab> in front of a line inserts blanks according to 'shiftwidth'
 vim.o.shiftround      = true      -- round indent
 
+vim.o.ignorecase      = true      -- ignore case while searching
+vim.o.smartcase       = true      -- override the 'ignorecase' option if the search pattern contains uppercase characters
+vim.o.hlsearch        = true      -- highlight search matches
+vim.o.incsearch       = true      -- highlight search matches while typing search command
+
 vim.o.splitright      = true      -- vertical splits open on the right
 vim.o.splitbelow      = true      -- horizontal splits open below
 
