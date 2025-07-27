@@ -145,27 +145,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- 4. LSP ==============================================================================================================
 
--- LSP servers to enable
-local lsp_servers = {
+vim.lsp.enable {
   "lua_ls",
 }
 
--- TODO: maybe move to after/lsp or .nvim/lsp since this is nvim specific settings
-vim.lsp.config("lua_ls", {
-  settings = {
-    Lua = {
-      runtime = { version = "LuaJIT" },
-      workspace = {
-        library = {
-          -- TODO: include plugin directories
-          vim.env.VIMRUNTIME,
-        },
-      },
-      diagnostics = {
-        globals = { "vim" },
-      },
-    },
-  },
-})
 
 vim.lsp.enable(lsp_servers)
