@@ -130,7 +130,8 @@ local ts_parsers = {
 
 require "nvim-treesitter" .install(ts_parsers)
 
-vim.api.nvim_create_autocmd("FileType", { -- enable treesitter highlighting and indents
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "Enable treesitter highlighting and indents",
   callback = function(args)
     local filetype = args.match
     local lang = vim.treesitter.language.get_lang(filetype)
