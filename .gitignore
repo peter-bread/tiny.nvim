@@ -1,4 +1,7 @@
 .env
 .mise.local.toml
 
+.nvim.lua
+.nvim/
+
 .lazydev_*
