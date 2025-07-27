@@ -150,4 +150,13 @@ vim.lsp.enable {
 }
 
 
-vim.lsp.enable(lsp_servers)
+-- 5. KEYMAPS ==========================================================================================================
+
+vim.keymap.set({ "n", "i", "s" }, "<esc>", function()
+  vim.snippet.stop()  -- exit current snippet (native snippets only)
+  vim.cmd("noh")      -- clear search highlighting
+  return "<esc>"      -- standard esc behaviour
+end, { expr = true, desc = "Escape+" }) -- expr to make sure "<esc>" is actually evaluated
+
+vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Write" })
+vim.keymap.set("n", "<leader>x", "<cmd>x<cr>", { desc = "Write & Quit" })
