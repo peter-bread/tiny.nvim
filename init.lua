@@ -42,6 +42,8 @@ vim.o.list            = true      -- show invisible characters (e.g. trailing sp
 
 vim.o.exrc            = true
 
+vim.o.wrap            = false
+
 
 -- 2. PLUGIN INSTALLATION ==============================================================================================
 
