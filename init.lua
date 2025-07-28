@@ -75,7 +75,7 @@ vim.pack.add {
 
 -- 3.a. kanagawa.nvim (colorscheme) ------------------------------------------------------------------------------------
 
-require "kanagawa" .setup {
+require "kanagawa" .setup { ---@type KanagawaConfig
   colors = {
     theme = {
       all = {
@@ -86,6 +86,7 @@ require "kanagawa" .setup {
     },
   },
 
+  ---@param colors KanagawaColors
   overrides = function(colors)
     local theme = colors.theme
 
