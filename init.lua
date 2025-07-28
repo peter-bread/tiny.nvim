@@ -1,8 +1,8 @@
 -- 0. CHECKS ===========================================================================================================
 
 -- nvim 0.12 is required for `vim.pack`.
-if vim.fn.has("nvim-0.12") == 0 then
-  error("[ERROR] Requires nvim 0.12")
+if vim.fn.has "nvim-0.12" == 0 then
+  error "[ERROR] Requires nvim 0.12"
 end
 
 
@@ -154,7 +154,7 @@ vim.lsp.enable {
 
 vim.keymap.set({ "n", "i", "s" }, "<esc>", function()
   vim.snippet.stop()  -- exit current snippet (native snippets only)
-  vim.cmd("noh")      -- clear search highlighting
+  vim.cmd "noh"       -- clear search highlighting
   return "<esc>"      -- standard esc behaviour
 end, { expr = true, desc = "Escape+" }) -- expr to make sure "<esc>" is actually evaluated
 
