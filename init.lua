@@ -153,6 +153,8 @@ vim.lsp.enable {
 
 -- 5. KEYMAPS ==========================================================================================================
 
+-- 5.a General ---------------------------------------------------------------------------------------------------------
+
 vim.keymap.set({ "n", "i", "s" }, "<esc>", function()
   vim.snippet.stop()  -- exit current snippet (native snippets only)
   vim.cmd "noh"       -- clear search highlighting
@@ -161,3 +163,17 @@ end, { expr = true, desc = "Escape+" }) -- expr to make sure "<esc>" is actually
 
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Write" })
 vim.keymap.set("n", "<leader>x", "<cmd>x<cr>", { desc = "Write & Quit" })
+
+
+-- 5.b Navigate Splits -------------------------------------------------------------------------------------------------
+
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Focus left pane" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Focus lower pane" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Focus upper pane" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Focus right pane" })
+
+
+-- 5.c Open Splits -----------------------------------------------------------------------------------------------------
+
+vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split below" })
+vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split right" })
