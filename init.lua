@@ -121,7 +121,7 @@ vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Parent Dir" })
 
 -- 3.c. nvim-treesitter (treesitter parser management) -----------------------------------------------------------------
 
-local ts_parsers = {
+require "nvim-treesitter" .install {
   "c",
   "lua",
   "markdown",
@@ -130,8 +130,6 @@ local ts_parsers = {
   "vim",
   "vimdoc",
 }
-
-require "nvim-treesitter" .install(ts_parsers)
 
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Enable treesitter highlighting and indents",
