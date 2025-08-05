@@ -49,13 +49,10 @@ vim.o.wrap            = false
 
 vim.api.nvim_create_autocmd("PackChanged", {
   callback = function(ev)
-    -- if ev.data.spec.name == "nvim-treesitter" and ev.data.kind == "update" then
-    -- if ev.data.spec.name == "nvim-treesitter" and vim.tbl_contains({"install", "update"}, ev.data.kind) then
-    -- if ev.data.spec.name == "nvim-treesitter" and ev.data.kind == "update" or ev.data.kind == "install" then
-
-    local ok, nts = pcall(require, "nvim-treesitter")
-    if not ok then return end
-    nts.update()
+    if ev.data.spec.name == "nvim-treesitter" and ev.data.kind == "update" --[[or ev.data.kind == "install"]] then
+      local ok, _ = pcall(function() require "nvim-treesitter" .update "all" end)
+      if not ok then vim.notify "[ERROR] Failed to update nvim-treesitter parsers" end
+    end
   end,
 })
 
