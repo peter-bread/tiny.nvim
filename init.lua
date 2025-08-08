@@ -75,15 +75,7 @@ vim.pack.add {
 -- 3.a. kanagawa.nvim (colorscheme) ------------------------------------------------------------------------------------
 
 require "kanagawa" .setup { ---@type KanagawaConfig
-  colors = {
-    theme = {
-      all = {
-        ui = {
-          bg_gutter = "none",
-        },
-      },
-    },
-  },
+  colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
 
   ---@param colors KanagawaColors
   overrides = function(colors)
