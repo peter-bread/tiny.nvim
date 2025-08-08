@@ -90,6 +90,7 @@ require "kanagawa" .setup { ---@type KanagawaConfig
     }
   end,
 }
+
 vim.cmd.colorscheme "kanagawa"
 
 
