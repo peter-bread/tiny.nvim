@@ -115,9 +115,15 @@ require "oil" .setup {
   },
   -- Skip the confirmation popup for simple operations (:h oil.skip_confirm_for_simple_edits)
   skip_confirm_for_simple_edits = true,
+  float = {
+    border = "solid",
+    max_width = 0.8,
+    max_height = 0.6,
+  },
 }
 
-vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Parent Dir" })
+vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Oil" })
+-- vim.keymap.set("n", "-", require "oil" .open_float, { desc = "Oil (Float)" })
 
 
 -- 3.c. nvim-treesitter (treesitter parser management) -----------------------------------------------------------------
