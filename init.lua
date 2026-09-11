@@ -131,7 +131,7 @@ vim.pack.add(plugins)
 --   :map(function(a) return a.desc or "unknown" end)
 --   :totable()
 --
--- -- Pritn autocmds that did not run
+-- -- Print autocmds that did not run
 -- vim.print(autocmds)
 --
 -- -- Delete autocmds that did not run
