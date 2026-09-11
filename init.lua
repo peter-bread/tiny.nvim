@@ -66,57 +66,21 @@ vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost"}, {
 -- TODO: Make sure sync and async plugin installation works.
 -- Sync is requried for bootstrap/headless scripts.
 
-local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
-
----Set build commands for plugins. These are commands that should be run after a plugin is installed or updated.
----@param name string Plugin name.
----@param fn fun() Build command.
-local function build(name, fn)
-  vim.api.nvim_create_autocmd("PackChanged", {
-    once = true,
-    group = build_group,
-    desc = name,
-    callback = function(ev)
-      local kind = ev.data.kind
-      -- Delete autocmd on wrong event kind
-      if kind ~= "install" and kind ~= "update" then return true end
-      -- Keep autocmd if we have the wrong name -- it might run on a later plugin
-      if name ~= ev.data.spec.name then return false end
-
-      -- Ensure plugin is loaded
-      if not ev.data.active then
-        vim.cmd.packadd(name)
-      end
-
-      fn()
-
-      -- Delete autocmd when done
-      return true
-    end
-  })
-end
-
----Extended plugin spec.
----@class TinyPluginSpec : vim.pack.Spec
----@field build fun() Build command.
-
 -- Common URL shorteners
-local gh = function(x) return "https://github.com/" .. x end
-local gl = function(x) return "https://gitlab.com/" .. x end
-local cb = function(x) return "https://codeberg.org/" .. x end
+local url = require "tiny.pack" .url
 
----@type (string|TinyPluginSpec)[]
+---@type tiny.pack.Plugin[]
 local plugins = {
   -- Appearance
-  gh "rebelot/kanagawa.nvim",
-  -- gh "echasnovski/mini.icons",
+  url.gh "rebelot/kanagawa.nvim",
+  -- url.gh "echasnovski/mini.icons",
 
   -- Navigation
-  gh "stevearc/oil.nvim",
-  -- gh "ibhagwan/fzf-lua",
+  url.gh "stevearc/oil.nvim",
+  -- url.gh "ibhagwan/fzf-lua",
 
   {
-    src = gh "nvim-treesitter/nvim-treesitter",
+    src = url.gh "nvim-treesitter/nvim-treesitter",
     version = "main",
     build = function()
       local ok, _ = pcall(function() require "nvim-treesitter" .update "all" end)
@@ -124,36 +88,11 @@ local plugins = {
     end
   },
 
-  gh "neovim/nvim-lspconfig", -- data only
+  url.gh "neovim/nvim-lspconfig", -- data only
 }
 
--- Prepare build commands before plugin installation
-for _, p in ipairs(plugins) do
-  if p.build then
-    -- TODO: Check vim.pack source code for more robust name resolution
-    local name = p.name or p.src:match "/([^/]+)$"
-    -- TODO: nil check?
-    build(name, p.build)
-  end
-end
+require "tiny.pack" .install(plugins)
 
--- TODO: Maybe explicitly remove `build` field from specs?
--- For now this is not an issue as it is ignored.
-vim.pack.add(plugins)
-
--- -- After plugin stuff is done, if there are any autocmds that haven't been run, log it and then clear the group.
--- -- This may not be desired, as you may update a plugin later in a session?? Need to investigate this.
---
--- -- Get desc/name of build autocmds that did not run.
--- local autocmds = vim.iter(vim.api.nvim_get_autocmds({ group = build_group }))
---   :map(function(a) return a.desc or "unknown" end)
---   :totable()
---
--- -- Print autocmds that did not run
--- vim.print(autocmds)
---
--- -- Delete autocmds that did not run
--- vim.api.nvim_del_augroup_by_id(build_group)
 
 -- 3. PLUGIN SETUP =====================================================================================================
 
