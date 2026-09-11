@@ -35,7 +35,7 @@ end
 
 ---Install plugins.
 ---@param plugins (tiny.pack.Plugin)[]
-function M.install(plugins)
+function M.add(plugins)
   -- Prepare build commands before plugin installation
   for _, p in ipairs(plugins) do
     if type(p) == "table" and p.build then

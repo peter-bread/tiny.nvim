@@ -91,7 +91,7 @@ local plugins = {
   url.gh "neovim/nvim-lspconfig", -- data only
 }
 
-require "tiny.pack" .install(plugins)
+require "tiny.pack" .add(plugins)
 
 
 -- 3. PLUGIN SETUP =====================================================================================================
