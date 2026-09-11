@@ -36,6 +36,9 @@ vim.o.cursorline      = true
 vim.o.signcolumn      = "yes"
 vim.o.statuscolumn    = "%=%{v:relnum == 0 ? v:lnum : v:relnum} %s"
 
+vim.o.pumheight       = 15        -- max height of pop-up menus
+vim.o.winborder       = "solid"   -- default border style of floating windows
+
 
 vim.o.list            = true      -- show invisible characters (e.g. trailing spaces)
 
