@@ -47,6 +47,20 @@ vim.o.exrc            = true
 vim.o.wrap            = false
 
 
+-- 1.1. MORE CONFIG ======================================================================================================
+-- TODO: Work out a better place to put this.
+
+require("vim._core.ui2").enable({})
+
+vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost"}, {
+  desc = "Highlight on yank and put",
+  group = vim.api.nvim_create_augroup("tiny.hl", {}),
+  callback = function()
+    vim.hl.hl_op {}
+  end,
+})
+
+
 -- 2. PLUGIN INSTALLATION ==============================================================================================
 
 -- TODO: Make sure sync and async plugin installation works.
@@ -69,14 +83,14 @@ local function build(name, fn)
       -- Keep autocmd if we have the wrong name -- it might run on a later plugin
       if name ~= ev.data.spec.name then return false end
 
-      -- Ensure plugin is loaded.
+      -- Ensure plugin is loaded
       if not ev.data.active then
         vim.cmd.packadd(name)
       end
 
       fn()
 
-      -- Delete autocmd when done.
+      -- Delete autocmd when done
       return true
     end
   })
@@ -93,13 +107,13 @@ local cb = function(x) return "https://codeberg.org/" .. x end
 
 ---@type (string|TinyPluginSpec)[]
 local plugins = {
-  -- appearance
+  -- Appearance
   gh "rebelot/kanagawa.nvim",
-  -- "https://github.com/echasnovski/mini.icons",
+  -- gh "echasnovski/mini.icons",
 
-  -- navigation
+  -- Navigation
   gh "stevearc/oil.nvim",
-  -- "https://github.com/ibhagwan/fzf-lua",
+  -- gh "ibhagwan/fzf-lua",
 
   {
     src = gh "nvim-treesitter/nvim-treesitter",
@@ -116,8 +130,9 @@ local plugins = {
 -- Prepare build commands before plugin installation
 for _, p in ipairs(plugins) do
   if p.build then
-    -- TODO: nil check?
+    -- TODO: Check vim.pack source code for more robust name resolution
     local name = p.name or p.src:match "/([^/]+)$"
+    -- TODO: nil check?
     build(name, p.build)
   end
 end
