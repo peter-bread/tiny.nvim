@@ -1,6 +1,6 @@
 ---Extended plugin spec.
 ---@class tiny.pack.Spec : vim.pack.Spec
----@field build fun() Build command.
+---@field build? fun() Build command.
 
 ---@alias tiny.pack.Plugin string | tiny.pack.Spec
 
