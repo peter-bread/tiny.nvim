@@ -93,6 +93,7 @@ local plugins = {
   {
     src = url.gh "nvim-treesitter/nvim-treesitter",
     build = function() require "nvim-treesitter" .update "all" end
+    -- build = ":TSUpdate",
   },
 
   -- Sane LSP configurations
