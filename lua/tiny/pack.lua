@@ -26,6 +26,8 @@
 
 ---@class tiny.pack
 local M = {
+  -- TODO: Perhaps use https://github.com/neovim/neovim/discussions/37064.
+  -- If so, are the url functions are still needed?
   url = {},
 }
 
