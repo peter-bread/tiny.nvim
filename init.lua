@@ -81,7 +81,6 @@ local plugins = {
 
   {
     src = url.gh "nvim-treesitter/nvim-treesitter",
-    version = "main",
     build = function()
       local ok, _ = pcall(function() require "nvim-treesitter" .update "all" end)
       if not ok then vim.notify "[ERROR] Failed to update nvim-treesitter parsers" end
