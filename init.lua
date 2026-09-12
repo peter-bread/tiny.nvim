@@ -71,22 +71,31 @@ local url = require "tiny.pack" .url
 
 ---@type tiny.pack.Plugin[]
 local plugins = {
-  -- Appearance
+  -- Colorscheme
   url.gh "rebelot/kanagawa.nvim",
+
+  -- Icons
   -- url.gh "echasnovski/mini.icons",
 
-  -- Navigation
+  -- File explorer
   url.gh "stevearc/oil.nvim",
+
+  -- File finder
+  {
+    src = url.gh "dmtrKovalenko/fff",
+    build = function() require "fff.download" .download_or_build_binary() end
+  },
+  -- url.gh "folke/snacks.nvim",
+  -- url.gh "nvim-telescope/telescope.nvim",
   -- url.gh "ibhagwan/fzf-lua",
 
+  -- Treesitter
   {
     src = url.gh "nvim-treesitter/nvim-treesitter",
-    build = function()
-      local ok, _ = pcall(function() require "nvim-treesitter" .update "all" end)
-      if not ok then vim.notify "[ERROR] Failed to update nvim-treesitter parsers" end
-    end
+    build = function() require "nvim-treesitter" .update "all" end
   },
 
+  -- Sane LSP configurations
   url.gh "neovim/nvim-lspconfig", -- data only
 }
 
