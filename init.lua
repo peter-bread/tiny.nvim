@@ -77,7 +77,30 @@ local url = require "tiny.pack" .url
 ---@type tiny.pack.Plugin[]
 local plugins = {
   -- Colorscheme
-  url.gh "rebelot/kanagawa.nvim",
+  {
+    src = url.gh "rebelot/kanagawa.nvim",
+    config = function()
+      ---@diagnostic disable-next-line
+      require "kanagawa" .setup {
+        colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
+
+        ---@param colors KanagawaColors
+        overrides = function(colors)
+          local theme = colors.theme
+
+          return {
+            -- Dark popup menus
+            Pmenu       = {               bg = theme.ui.bg_p1 },
+            PmenuSel    = { fg = "NONE",  bg = theme.ui.bg_p2 },
+            PmenuSbar   = {               bg = theme.ui.bg_m1 },
+            PmenuThumb  = {               bg = theme.ui.bg_p2 },
+          }
+        end,
+      }
+
+      vim.cmd.colorscheme "kanagawa"
+    end,
+  },
 
   -- Icons
   -- url.gh "echasnovski/mini.icons",
@@ -105,33 +128,11 @@ local plugins = {
   url.gh "neovim/nvim-lspconfig", -- data only
 }
 
-require "tiny.pack" .add(plugins)
+-- Setup plugins
+require "tiny.pack" .setup(plugins)
 
 
 -- 3. PLUGIN SETUP =====================================================================================================
-
--- 3.a. kanagawa.nvim (colorscheme) ------------------------------------------------------------------------------------
-
----@diagnostic disable-next-line
-require "kanagawa" .setup {
-  colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
-
-  ---@param colors KanagawaColors
-  overrides = function(colors)
-    local theme = colors.theme
-
-    return {
-      -- dark popup menus
-      Pmenu = { bg = theme.ui.bg_p1 },
-      PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-      PmenuSbar = { bg = theme.ui.bg_m1 },
-      PmenuThumb = { bg = theme.ui.bg_p2 },
-    }
-  end,
-}
-
-vim.cmd.colorscheme "kanagawa"
-
 
 -- 3.b. oil.nvim (file explorer) ---------------------------------------------------------------------------------------
 

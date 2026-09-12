@@ -13,6 +13,11 @@
 ---TODO: Allow more forms, e.g. shell commands, `vim.system`, lists of commands,
 ---      etc.
 ---@field build? string|fun()
+---
+---Config function to run after plugins are installed.
+---TODO: Pass in some kind of context, `opts` field or similar if that gets
+---      implemented
+---@field config? fun()
 
 ---Plugin.
 ---
@@ -21,7 +26,7 @@
 
 ---@class tiny.pack
 local M = {
-  url = {}
+  url = {},
 }
 
 local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
@@ -43,7 +48,9 @@ local function build(name, fn)
       if name ~= ev.data.spec.name then return end
 
       -- Ensure plugin is loaded
-      if not ev.data.active then vim.cmd.packadd(name) end
+      if not ev.data.active then
+        vim.cmd.packadd(name)
+      end
 
       if type(fn) == "function" then
         fn()
@@ -52,9 +59,12 @@ local function build(name, fn)
 
       if type(fn) == "string" then
         -- If it starts with a colon, treat it as a Neovim command
-        if fn:sub(1, 1) == ":" then vim.cmd(fn:sub(2)) end
+        if fn:sub(1, 1) == ":" then
+          vim.cmd(fn:sub(2))
+        end
+        return
       end
-    end
+    end,
   })
 end
 
@@ -78,6 +88,23 @@ function M.add(plugins)
   -- TODO: Maybe explicitly remove `build` field from specs?
   -- For now this is not an issue as it is ignored.
   vim.pack.add(plugins)
+end
+
+---Run `config` functions.
+---@param plugins tiny.pack.Plugin[]
+function M.config(plugins)
+  vim.iter(plugins):each(function(p)
+    if p.config and type(p.config) == "function" then
+      p.config()
+    end
+  end)
+end
+
+---Setup all plugins.
+---@param plugins tiny.pack.Plugin[]
+function M.setup(plugins)
+  M.add(plugins)
+  M.config(plugins)
 end
 
 ---@param x string
