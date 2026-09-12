@@ -11,6 +11,11 @@ end
 vim.g.mapleader       = " "
 vim.g.maplocalleader  = "\\"
 
+-- Fix markdown indentation settings.
+-- See `:helpg markdown_recommended_style`.
+-- See 'https://github.com/tpope/vim-markdown/commit/b78bbce3371a2eb56c89f618cd4ab2baadc9ee61'.
+vim.g.markdown_recommended_style = 0
+
 vim.o.number          = true
 vim.o.relativenumber  = true
 
