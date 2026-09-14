@@ -29,7 +29,11 @@ local plugins = {
 }
 
 -- Install plugins
-require "tiny.pack" .add(plugins)
+require "tiny.pack" .setup(plugins)
+
+-- ...
+-- ...
+-- ...
 
 -- Configure plugins separately:
 -- Some plugin use a setup function...
@@ -84,8 +88,6 @@ local plugins = {
   },
 }
 
--- Install plugins
-require "tiny.pack" .add(plugins)
--- Configure plugins
-require "tiny.pack" .config(plugins)
+-- Install plugins and configure plugins
+require "tiny.pack" .setup(plugins, { do_config = true })
 ```

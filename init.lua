@@ -133,7 +133,7 @@ local plugins = {
 }
 
 -- Setup plugins
-require "tiny.pack" .setup(plugins)
+require "tiny.pack" .setup(plugins, { do_config = true })
 
 
 -- 3. PLUGIN SETUP =====================================================================================================

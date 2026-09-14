@@ -37,8 +37,9 @@ local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
 ---a plugin is installed or updated.
 ---@param name string Plugin name.
 ---@param fn string|fun() Build command.
-local function build(name, fn)
+local function register_build_command(name, fn)
   vim.validate("name", name, "string")
+  -- TODO: Can we validate that the string starts with a colon here?
   vim.validate("fn", fn, { "string", "function" })
 
   vim.api.nvim_create_autocmd("PackChanged", {
@@ -70,43 +71,88 @@ local function build(name, fn)
   })
 end
 
----Install plugins.
+---Convert `"some-plugin"` to `{ src = "some-plugin" }`.
+---@param plugin tiny.pack.Plugin
+---@return tiny.pack.Spec
+local function plugin_to_spec(plugin)
+  if type(plugin) == "table" then return plugin end
+  return { src = plugin }
+end
+
+--- Normalize plugins into table form.
+---
+--- ```lua
+--- { "some-plugin", { src = "other-plugin" } }
+--- -- becomes
+--- { { src = "some-plugin" }, { src = "other-plugin" } }
+--- ```
 ---@param plugins tiny.pack.Plugin[]
-function M.add(plugins)
-  -- Prepare build commands before plugin installation
-  for _, p in ipairs(plugins) do
-    if type(p) == "table" and p.build ~= nil then
-      -- TODO: Check vim.pack source code for more robust name resolution
-      local name = p.name or p.src:match "/([^/]+)$"
-      if not name then
-        -- TODO: Log that name could not be determined
-        goto continue
-      end
-      build(name, p.build)
-    end
-    ::continue::
-  end
+---@return tiny.pack.Spec[]
+---@see tiny.pack.Plugin
+---@see tiny.pack.Spec
+local function plugins_to_specs(plugins)
+  return vim.iter(plugins):map(plugin_to_spec):totable()
+end
+
+---Extract name from a plugin spec.
+---
+---This should be kept in-sync with the logic used inside `vim.pack` itself.
+---@param spec tiny.pack.Spec
+---@see vim.pack.Spec
+local function extract_name_from_spec(spec)
+  -- TODO: Replace ' with "
+  -- From neovim source code:
+  -- runtime/lua/vim/pack.lua normalize_spec
+  local name = spec.name or spec.src:gsub('%.git$', '')
+  name = (type(name) == 'string' and name or ''):match('[^/]+$') or ''
+  vim.validate("name", name, function(s) return type(s) == "string" and s ~= "" end, false, "non-empty string")
+  return name
+end
+
+---Register build commands.
+---@param specs tiny.pack.Spec[]
+local function register_build_commands(specs)
+  vim.iter(specs)
+    :filter(function(spec) return spec.build end)
+    :map(function(spec) return extract_name_from_spec(spec), spec.build end)
+    :each(register_build_command)
+end
+
+---Install plugins.
+---@param specs tiny.pack.Spec[]
+---@private
+function M.add(specs)
+  register_build_commands(specs)
 
   -- TODO: Maybe explicitly remove `build` field from specs?
   -- For now this is not an issue as it is ignored.
-  vim.pack.add(plugins)
+  vim.pack.add(specs)
 end
 
 ---Run `config` functions.
----@param plugins tiny.pack.Plugin[]
-function M.config(plugins)
-  vim.iter(plugins):each(function(p)
-    if p.config and type(p.config) == "function" then
-      p.config()
+---@param specs tiny.pack.Spec[]
+---@private
+function M.config(specs)
+  vim.iter(specs):each(function(spec)
+    if spec.config and type(spec.config) == "function" then
+      spec.config()
     end
   end)
 end
 
+-- TODO: Should `add` and `config` still be exposed even though they only accept
+-- tiny.pack.Spec and not tiny.pack.Plugin.
+
 ---Setup all plugins.
----@param plugins tiny.pack.Plugin[]
-function M.setup(plugins)
-  M.add(plugins)
-  M.config(plugins)
+---@param plugins tiny.pack.Plugin[] List of plugins.
+---@param opts? tiny.pack.Opts Config.
+function M.setup(plugins, opts)
+  opts = resolve_config(opts)
+  local specs = plugins_to_specs(plugins)
+  M.add(specs)
+  if opts.do_config then
+    M.config(specs)
+  end
 end
 
 ---@param x string
@@ -122,6 +168,23 @@ end
 ---@param x string
 function M.url.cb(x)
   return "https://codeberg.org/" .. x
+end
+
+
+
+---@class tiny.pack.Opts
+---Run `config` functions if they exist.
+---@field do_config bool
+
+---@type tiny.pack.Opts
+local DEFAULT_CONFIG = {
+  do_config = false
+}
+
+---@param opts? tiny.pack.Opts
+---@return tiny.pack.Opts
+function resolve_config(opts)
+  return vim.tbl_deep_extend("force", DEFAULT_CONFIG, opts or {})
 end
 
 return M
