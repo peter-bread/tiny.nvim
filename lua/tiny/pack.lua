@@ -161,7 +161,7 @@ end
 ---@class (exact) tiny.pack.Opts
 ---
 ---Run `config` functions if they exist.
----@field do_config? bool
+---@field do_config? boolean
 ---
 ---Mapping of short host prefixes to full host expansions.
 ---@field host_prefixes? table<string, string>
@@ -171,7 +171,7 @@ end
 ---@class (exact) tiny.pack.Config
 ---
 ---Run `config` functions if they exist.
----@field do_config bool
+---@field do_config boolean
 ---
 ---Mapping of short host prefixes to full host expansions.
 ---@field host_prefixes table<string, string>
