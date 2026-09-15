@@ -12,7 +12,7 @@
 ---TODO: Pass some kind of context to the build function.
 ---TODO: Allow more forms, e.g. shell commands, `vim.system`, lists of commands,
 ---      etc.
----@field build? string|fun()
+---@field build? tiny.pack.BuildCommand
 ---
 ---Config function to run after plugins are installed.
 ---TODO: Pass in some kind of context, `opts` field or similar if that gets
@@ -24,6 +24,9 @@
 ---A `string` is equivalent to `{ src = "<string>" }`.
 ---@alias tiny.pack.Plugin string | tiny.pack.Spec
 
+---Build command.
+---@alias tiny.pack.BuildCommand string|fun()
+
 ---@class tiny.pack
 local M = {}
 
@@ -32,11 +35,12 @@ local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
 ---Set build commands for plugins. These are commands that should be run after
 ---a plugin is installed or updated.
 ---@param name string Plugin name.
----@param fn string|fun() Build command.
-local function register_build_command(name, fn)
+---@param build tiny.pack.BuildCommand Build command.
+local function register_build_command(name, build)
+  -- TODO: Should we specify non-empty string?
   vim.validate("name", name, "string")
   -- TODO: Can we validate that the string starts with a colon here?
-  vim.validate("fn", fn, { "string", "function" })
+  vim.validate("fn", build, { "string", "function" })
 
   vim.api.nvim_create_autocmd("PackChanged", {
     group = build_group,
@@ -51,15 +55,15 @@ local function register_build_command(name, fn)
         vim.cmd.packadd(name)
       end
 
-      if type(fn) == "function" then
-        fn()
+      if type(build) == "function" then
+        build()
         return
       end
 
-      if type(fn) == "string" then
+      if type(build) == "string" then
         -- If it starts with a colon, treat it as a Neovim command
-        if fn:sub(1, 1) == ":" then
-          vim.cmd(fn:sub(2))
+        if build:sub(1, 1) == ":" then
+          vim.cmd(build:sub(2))
         end
         return
       end
