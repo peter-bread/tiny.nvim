@@ -129,6 +129,7 @@ end
 ---@param specs tiny.pack.Spec[]
 ---@private
 function M.config(specs)
+  ---@diagnostic disable-next-line: access-invisible I think emmylua is getting confused.
   vim.iter(specs):each(function(spec)
     if spec.config and type(spec.config) == "function" then
       spec.config()
