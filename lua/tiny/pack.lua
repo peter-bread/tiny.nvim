@@ -147,9 +147,13 @@ end
 ---@param plugins tiny.pack.Plugin[] List of plugins.
 ---@param opts? tiny.pack.Opts Config.
 function M.setup(plugins, opts)
+  vim.validate("plugins", plugins, vim.islist)
+
   opts = resolve_config(opts)
   local specs = plugins_to_specs(plugins)
+
   M.add(specs)
+
   if opts.do_config then
     M.config(specs)
   end
@@ -184,6 +188,7 @@ local DEFAULT_CONFIG = {
 ---@param opts? tiny.pack.Opts
 ---@return tiny.pack.Opts
 function resolve_config(opts)
+  vim.validate("opts", opts, "table")
   return vim.tbl_deep_extend("force", DEFAULT_CONFIG, opts or {})
 end
 
