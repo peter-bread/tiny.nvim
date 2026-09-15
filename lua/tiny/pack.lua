@@ -90,21 +90,6 @@ local function plugin_to_spec(plugin)
   return { src = plugin }
 end
 
---- Normalize plugins into table form.
----
---- ```lua
---- { "some-plugin", { src = "other-plugin" } }
---- -- becomes
---- { { src = "some-plugin" }, { src = "other-plugin" } }
---- ```
----@param plugins tiny.pack.Plugin[]
----@return tiny.pack.Spec[]
----@see tiny.pack.Plugin
----@see tiny.pack.Spec
-local function plugins_to_specs(plugins)
-  return vim.iter(plugins):map(plugin_to_spec):totable()
-end
-
 ---Extract name from a plugin spec.
 ---
 ---This should be kept in-sync with the logic used inside `vim.pack` itself.
