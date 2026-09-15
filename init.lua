@@ -113,8 +113,8 @@ local plugins = {
     src = url.gh "dmtrKovalenko/fff",
     build = function() require "fff.download" .download_or_build_binary() end,
     config = function()
-      vim.keymap.set("n", "<leader>ff", require('fff').find_files, { desc = "Find Files" })
-      vim.keymap.set("n", "<leader>fg", require('fff').live_grep, { desc = "Live Grep" })
+      vim.keymap.set("n", "<leader>ff", require("fff").find_files, { desc = "Find Files" })
+      vim.keymap.set("n", "<leader>fg", require("fff").live_grep, { desc = "Live Grep" })
     end,
   },
   -- url.gh "folke/snacks.nvim",
