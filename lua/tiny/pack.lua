@@ -25,11 +25,7 @@
 ---@alias tiny.pack.Plugin string | tiny.pack.Spec
 
 ---@class tiny.pack
-local M = {
-  -- TODO: Perhaps use https://github.com/neovim/neovim/discussions/37064.
-  -- If so, are the url functions are still needed?
-  url = {},
-}
+local M = {}
 
 local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
 
@@ -143,53 +139,89 @@ end
 -- TODO: Should `add` and `config` still be exposed even though they only accept
 -- tiny.pack.Spec and not tiny.pack.Plugin.
 
+local function expand_host(name, host_prefixes)
+  for short, long in pairs(host_prefixes) do
+    if vim.startswith(name, short .. ':') then
+      return (name:gsub('^' .. short .. ':', long))
+    end
+  end
+  return name
+end
+
+---@param spec tiny.pack.Spec
+---@param host_prefixes table<string, string>
+---@return tiny.pack.Spec
+local function expand_prefix(spec, host_prefixes)
+  spec.src = expand_host(spec.src, host_prefixes)
+  return spec
+end
+
+
+---User-facing options to override default configuration.
+---@class (exact) tiny.pack.Opts
+---
+---Run `config` functions if they exist.
+---@field do_config? bool
+---
+---Mapping of short host prefixes to full host expansions.
+---@field host_prefixes? table<string, string>
+
+
+---Fully resolved configuration.
+---@class (exact) tiny.pack.Config
+---
+---Run `config` functions if they exist.
+---@field do_config bool
+---
+---Mapping of short host prefixes to full host expansions.
+---@field host_prefixes table<string, string>
+
+---@type tiny.pack.Config
+local DEFAULT_CONFIG = {
+  do_config = false,
+  host_prefixes = {
+    github = "https://github.com/",
+    gitlab = "https://gitlab.com/",
+    codeberg = "https://codeberg.org/",
+  }
+}
+
+---Merge user config with default config.
+---@param opts? tiny.pack.Opts
+---@return tiny.pack.Config
+local function resolve_config(opts)
+  vim.validate("opts", opts, "table", true)
+  return vim.tbl_deep_extend("force", DEFAULT_CONFIG, opts or {})
+end
+
+---@param plugins tiny.pack.Plugin[]
+---@param config tiny.pack.Config
+---@return tiny.pack.Spec[]
+local function resolve_specs(plugins, config)
+  vim.validate("plugins", plugins, vim.islist)
+  vim.validate("config", config, "table")
+
+  return vim.iter(plugins)
+    :map(plugin_to_spec)
+    :map(function(spec) return expand_prefix(spec, config.host_prefixes) end)
+    :totable()
+end
+
 ---Setup all plugins.
 ---@param plugins tiny.pack.Plugin[] List of plugins.
----@param opts? tiny.pack.Opts Config.
+---@param opts? tiny.pack.Opts Optional user configuration.
 function M.setup(plugins, opts)
   vim.validate("plugins", plugins, vim.islist)
+  vim.validate("opts", opts, "table", true)
 
-  opts = resolve_config(opts)
-  local specs = plugins_to_specs(plugins)
+  local config = resolve_config(opts)
+  local specs = resolve_specs(plugins, config)
 
   M.add(specs)
 
-  if opts.do_config then
+  if config.do_config then
     M.config(specs)
   end
-end
-
----@param x string
-function M.url.gh(x)
-  return "https://github.com/" .. x
-end
-
----@param x string
-function M.url.gl(x)
-  return "https://gitlab.com/" .. x
-end
-
----@param x string
-function M.url.cb(x)
-  return "https://codeberg.org/" .. x
-end
-
-
-
----@class tiny.pack.Opts
----Run `config` functions if they exist.
----@field do_config bool
-
----@type tiny.pack.Opts
-local DEFAULT_CONFIG = {
-  do_config = false
-}
-
----@param opts? tiny.pack.Opts
----@return tiny.pack.Opts
-function resolve_config(opts)
-  vim.validate("opts", opts, "table")
-  return vim.tbl_deep_extend("force", DEFAULT_CONFIG, opts or {})
 end
 
 return M

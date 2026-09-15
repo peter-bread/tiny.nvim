@@ -71,14 +71,11 @@ vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost"}, {
 -- TODO: Make sure sync and async plugin installation works.
 -- Sync is requried for bootstrap/headless scripts.
 
--- Common URL shorteners
-local url = require "tiny.pack" .url
-
 ---@type tiny.pack.Plugin[]
 local plugins = {
   -- Colorscheme
   {
-    src = url.gh "rebelot/kanagawa.nvim",
+    src = "github:rebelot/kanagawa.nvim",
     config = function()
       ---@diagnostic disable-next-line
       require "kanagawa" .setup {
@@ -103,33 +100,33 @@ local plugins = {
   },
 
   -- Icons
-  -- url.gh "echasnovski/mini.icons",
+  -- "github:echasnovski/mini.icons",
 
   -- File explorer
-  url.gh "stevearc/oil.nvim",
+  "github:stevearc/oil.nvim",
 
   -- File finder
   {
-    src = url.gh "dmtrKovalenko/fff",
+    src = "github:dmtrKovalenko/fff",
     build = function() require "fff.download" .download_or_build_binary() end,
     config = function()
       vim.keymap.set("n", "<leader>ff", require("fff").find_files, { desc = "Find Files" })
       vim.keymap.set("n", "<leader>fg", require("fff").live_grep, { desc = "Live Grep" })
     end,
   },
-  -- url.gh "folke/snacks.nvim",
-  -- url.gh "nvim-telescope/telescope.nvim",
-  -- url.gh "ibhagwan/fzf-lua",
+  -- "github:folke/snacks.nvim",
+  -- "github:nvim-telescope/telescope.nvim",
+  -- "github:ibhagwan/fzf-lua",
 
   -- Treesitter
   {
-    src = url.gh "nvim-treesitter/nvim-treesitter",
+    src = "github:nvim-treesitter/nvim-treesitter",
     build = function() require "nvim-treesitter" .update "all" end
     -- build = ":TSUpdate",
   },
 
   -- Sane LSP configurations
-  url.gh "neovim/nvim-lspconfig", -- data only
+  "github:neovim/nvim-lspconfig", -- data only
 }
 
 -- Setup plugins

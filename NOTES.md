@@ -16,14 +16,12 @@ example. This custom interface abstracts that away.
 This is essentially a drop-in replacement for vanilla `vim.pack`.
 
 ```lua
-local url = require "tiny.pack" .url
-
 ---@type tiny.pack.Plugin[]
 local plugins = {
-  url.gh "stevearc/oil.nvim",
+  "github:stevearc/oil.nvim",
 
   {
-    src = url.gh "dmtrKovalenko/fff",
+    src = "github:dmtrKovalenko/fff",
     build = function() require "fff.download" .download_or_build_binary() end
   },
 }
@@ -59,12 +57,10 @@ vim.g.fff = {
 > This is experimental and subject to bugs and changes.
 
 ```lua
-local url = require "tiny.pack" .url
-
 ---@type tiny.pack.Plugin[]
 local plugins = {
   {
-    src = url.gh "stevearc/oil.nvim",
+    src = "github:stevearc/oil.nvim",
     config = function()
       require "oil" .setup {
         columns = {
@@ -78,7 +74,7 @@ local plugins = {
   }
 
   {
-    src = url.gh "dmtrKovalenko/fff",
+    src = "github:dmtrKovalenko/fff",
     build = function() require "fff.download" .download_or_build_binary() end
     config = function()
       vim.g.fff = {
