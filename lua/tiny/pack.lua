@@ -67,7 +67,18 @@ local function register_build_command(name, fn)
   })
 end
 
----Convert `"some-plugin"` to `{ src = "some-plugin" }`.
+--- Normalize plugins to spec tables.
+---
+--- If a `plugin` is a `tiny.pack.Spec`, it will stay the same.
+--- If a `plugin` is a `string`, it will be converted into a `tiny.pack.Spec`.
+---
+--- ```lua
+--- plugin_to_spec("some-plugin")
+---  -- {  src = "some-plugin" }
+---
+--- plugin_to_spec({ src = "some-plugin" })
+---  -- {  src = "some-plugin" }
+--- ```
 ---@param plugin tiny.pack.Plugin
 ---@return tiny.pack.Spec
 local function plugin_to_spec(plugin)
