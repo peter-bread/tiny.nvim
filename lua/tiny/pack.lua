@@ -1,39 +1,39 @@
----Extended plugin spec.
+--- Extended plugin spec.
 ---@class tiny.pack.Spec : vim.pack.Spec
 ---
----Build command. This is executed after a plugin is installed or updated.
+--- Build command. This is executed after a plugin is installed or updated.
 ---
----It can in the form of:
---- - `fun()`: function that builds the plugin
---- - `":Command"`: a Neovim command
+--- It can in the form of:
+---  - `fun()`: function that builds the plugin
+---  - `":Command"`: a Neovim command
 ---
----Specifically, it runs on a `:h PackChanged` event.
+--- Specifically, it runs on a `:h PackChanged` event.
 ---
----TODO: Pass some kind of context to the build function.
----TODO: Allow more forms, e.g. shell commands, `vim.system`, lists of commands,
----      etc.
+--- TODO: Pass some kind of context to the build function.
+--- TODO: Allow more forms, e.g. shell commands, `vim.system`, lists of commands,
+---       etc.
 ---@field build? tiny.pack.BuildCommand
 ---
----Config function to run after plugins are installed.
----TODO: Pass in some kind of context, `opts` field or similar if that gets
----      implemented
+--- Config function to run after plugins are installed.
+--- TODO: Pass in some kind of context, `opts` field or similar if that gets
+---       implemented
 ---@field config? fun()
 
----Plugin.
+--- Plugin.
 ---
----A `string` is equivalent to `{ src = "<string>" }`.
+--- A `string` is equivalent to `{ src = "<string>" }`.
 ---@alias tiny.pack.Plugin string | tiny.pack.Spec
 
----Build command.
----@alias tiny.pack.BuildCommand string|fun()
+--- Build command.
+---@alias tiny.pack.BuildCommand string | fun()
 
 ---@class tiny.pack
 local M = {}
 
 local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
 
----Set build commands for plugins. These are commands that should be run after
----a plugin is installed or updated.
+--- Set build commands for plugins. These are commands that should be run after
+--- a plugin is installed or updated.
 ---@param name string Plugin name.
 ---@param build tiny.pack.BuildCommand Build command.
 local function register_build_command(name, build)
@@ -90,9 +90,9 @@ local function plugin_to_spec(plugin)
   return { src = plugin }
 end
 
----Extract name from a plugin spec.
+--- Extract name from a plugin spec.
 ---
----This should be kept in-sync with the logic used inside `vim.pack` itself.
+--- This should be kept in-sync with the logic used inside `vim.pack` itself.
 ---@param spec tiny.pack.Spec
 ---@see vim.pack.Spec
 local function extract_name_from_spec(spec)
@@ -105,7 +105,7 @@ local function extract_name_from_spec(spec)
   return name
 end
 
----Register build commands.
+--- Register build commands.
 ---@param specs tiny.pack.Spec[]
 local function register_build_commands(specs)
   vim.iter(specs)
@@ -114,7 +114,7 @@ local function register_build_commands(specs)
     :each(register_build_command)
 end
 
----Install plugins.
+--- Install plugins.
 ---@param specs tiny.pack.Spec[]
 ---@private
 function M.add(specs)
@@ -125,7 +125,7 @@ function M.add(specs)
   vim.pack.add(specs)
 end
 
----Run `config` functions.
+--- Run `config` functions.
 ---@param specs tiny.pack.Spec[]
 ---@private
 function M.config(specs)
@@ -162,23 +162,23 @@ local function expand_prefix(spec, host_prefixes)
 end
 
 
----User-facing options to override default configuration.
+--- User-facing options to override default configuration.
 ---@class (exact) tiny.pack.Opts
 ---
----Run `config` functions if they exist.
+--- Run `config` functions if they exist.
 ---@field do_config? boolean
 ---
----Mapping of short host prefixes to full host expansions.
+--- Mapping of short host prefixes to full host expansions.
 ---@field host_prefixes? table<string, string>
 
 
----Fully resolved configuration.
+--- Fully resolved configuration.
 ---@class (exact) tiny.pack.Config
 ---
----Run `config` functions if they exist.
+--- Run `config` functions if they exist.
 ---@field do_config boolean
 ---
----Mapping of short host prefixes to full host expansions.
+--- Mapping of short host prefixes to full host expansions.
 ---@field host_prefixes table<string, string>
 
 ---@type tiny.pack.Config
@@ -191,7 +191,7 @@ local DEFAULT_CONFIG = {
   }
 }
 
----Merge user config with default config.
+--- Merge user config with default config.
 ---@param opts? tiny.pack.Opts
 ---@return tiny.pack.Config
 local function resolve_config(opts)
@@ -212,7 +212,7 @@ local function resolve_specs(plugins, config)
     :totable()
 end
 
----Setup all plugins.
+--- Setup all plugins.
 ---@param plugins tiny.pack.Plugin[] List of plugins.
 ---@param opts? tiny.pack.Opts Optional user configuration.
 function M.setup(plugins, opts)
