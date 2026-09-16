@@ -140,6 +140,9 @@ end
 -- TODO: Should `add` and `config` still be exposed even though they only accept
 -- tiny.pack.Spec and not tiny.pack.Plugin.
 
+---@param name string
+---@param host_prefixes table<string, string>
+---@see https://github.com/neovim/neovim/discussions/37064
 local function expand_host(name, host_prefixes)
   for short, long in pairs(host_prefixes) do
     if vim.startswith(name, short .. ':') then
@@ -152,6 +155,7 @@ end
 ---@param spec tiny.pack.Spec
 ---@param host_prefixes table<string, string>
 ---@return tiny.pack.Spec
+---@see https://github.com/neovim/neovim/discussions/37064
 local function expand_prefix(spec, host_prefixes)
   spec.src = expand_host(spec.src, host_prefixes)
   return spec
