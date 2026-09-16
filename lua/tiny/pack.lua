@@ -165,25 +165,18 @@ end
 --- User-facing options to override default configuration.
 ---@class (exact) tiny.pack.Opts
 ---
---- Run `config` functions if they exist.
+--- (default: `false`) Whether to run `config` functions if they exist.
 ---@field do_config? boolean
 ---
 --- Mapping of short host prefixes to full host expansions.
 ---@field host_prefixes? table<string, string>
 
-
 --- Fully resolved configuration.
 ---@class (exact) tiny.pack.Config
----
---- Run `config` functions if they exist.
----@field do_config boolean
----
---- Mapping of short host prefixes to full host expansions.
----@field host_prefixes table<string, string>
-
----@type tiny.pack.Config
 local DEFAULT_CONFIG = {
+  ---@type boolean (default: `false`) Whether to run `config` functions if they exist.
   do_config = false,
+  ---@type table<string, string> Mapping of short host prefixes to full host expansions.
   host_prefixes = {
     github = "https://github.com/",
     gitlab = "https://gitlab.com/",
