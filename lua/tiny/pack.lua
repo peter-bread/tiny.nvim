@@ -1,3 +1,17 @@
+-- TODO: Instead of extending vim.pack.Spec with custom fields directly, we
+-- could make use of vim.pack.Spec.data, a field for arbitrary data.
+-- So it would be:
+--
+-- ```lua
+--  local plugin = {
+--    src = "...",
+--    data = {
+--      build = function() ... end,
+--      config = function() ... end,
+--    },
+--  }
+-- ```
+
 --- Extended plugin spec.
 ---@class tiny.pack.Spec : vim.pack.Spec
 ---
