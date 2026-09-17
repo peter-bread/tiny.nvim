@@ -17,9 +17,10 @@
 ---
 --- Build command. This is executed after a plugin is installed or updated.
 ---
---- It can in the form of:
+--- It can be in the form of:
 ---  - `fun()`: function that builds the plugin
 ---  - `":Command"`: a Neovim command
+---  - "shell command": a shell command executed with sh
 ---
 --- Specifically, it runs on a `:h PackChanged` event.
 ---
@@ -53,19 +54,21 @@ local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
 local function register_build_command(name, build)
   -- TODO: Should we specify non-empty string?
   vim.validate("name", name, "string")
-  -- TODO: Can we validate that the string starts with a colon here?
   vim.validate("fn", build, { "string", "function" })
 
   vim.api.nvim_create_autocmd("PackChanged", {
     group = build_group,
     desc = name,
     callback = function(ev)
-      local kind = ev.data.kind
-      if kind ~= "install" and kind ~= "update" then return end
-      if name ~= ev.data.spec.name then return end
+      -- `:h vim.pack-events`
+      local data = ev.data ---@type vim.event.packchanged.data
+
+      local kind = data.kind
+      if not (kind == "install" or kind == "update") then return end
+      if name ~= data.spec.name then return end
 
       -- Ensure plugin is loaded
-      if not ev.data.active then
+      if not data.active then
         vim.cmd.packadd(name)
       end
 
@@ -78,6 +81,9 @@ local function register_build_command(name, build)
         -- If it starts with a colon, treat it as a Neovim command
         if build:sub(1, 1) == ":" then
           vim.cmd(build:sub(2))
+        else
+          -- If it does not start with a colon, treat it as a shell command
+          vim.system({ "sh", "-c", build }, { cwd = data.path, text = true })
         end
         return
       end
