@@ -136,13 +136,14 @@ end
 
 --- Install plugins.
 ---@param specs tiny.pack.Spec[]
+---@param config tiny.pack.Config
 ---@private
-function M.add(specs)
+function M.add(specs, config)
   register_build_commands(specs)
 
   -- TODO: Maybe explicitly remove `build` field from specs?
   -- For now this is not an issue as it is ignored.
-  vim.pack.add(specs)
+  vim.pack.add(specs, { confirm = config.confirm })
 end
 
 --- Run `config` functions.
@@ -185,6 +186,9 @@ end
 --- User-facing options to override default configuration.
 ---@class (exact) tiny.pack.Opts
 ---
+--- (default: `true`) Whether to ask user to confirm initial install.
+---@field confirm? boolean
+---
 --- (default: `false`) Whether to run `config` functions if they exist.
 ---@field do_config? boolean
 ---
@@ -194,6 +198,8 @@ end
 --- Fully resolved configuration.
 ---@class (exact) tiny.pack.Config
 local DEFAULT_CONFIG = {
+  ---@type boolean (default: `true`) Whether to ask user to confirm initial install.
+  confirm = true,
   ---@type boolean (default: `false`) Whether to run `config` functions if they exist.
   do_config = false,
   ---@type table<string, string> Mapping of short host prefixes to full host expansions.
@@ -235,7 +241,7 @@ function M.setup(plugins, opts)
   local config = resolve_config(opts)
   local specs = resolve_specs(plugins, config)
 
-  M.add(specs)
+  M.add(specs, config)
 
   if config.do_config then
     M.config(specs)
