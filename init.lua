@@ -78,6 +78,15 @@ vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost"}, {
 -- ```lua
 -- require "tiny.pack" .setup(plugins):wait()
 -- ```
+--
+-- EDIT:
+--   HACK: We now have two options to customise plugin installation:
+--   - `confirm = false` skips user confirmation
+--   - `do_build = false` skips registering or executing build commands
+--
+--   We can use these for type-checking, where we just need plugins to be installed.
+--   However, this is not enough for performing headless installs - we will still
+--   need `vim.async` for that (probably).
 
 ---@type tiny.pack.Plugin[]
 local plugins = {
@@ -137,6 +146,15 @@ local plugins = {
   -- Sane LSP configurations
   "github:neovim/nvim-lspconfig", -- data only
 }
+
+if vim.env.TINY_NVIM_CI == "1" then
+  -- In CI, we may want to type-check the codebase. To do this, all plugins
+  -- need to be installed and loaded, but they do not need to be configured.
+  require "tiny.pack" .setup(plugins, { confirm = false, do_build = false })
+
+  -- No additional configuration is required, so we can stop here.
+  return
+end
 
 -- Setup plugins
 require "tiny.pack" .setup(plugins, { do_config = true })

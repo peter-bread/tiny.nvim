@@ -87,3 +87,17 @@ local plugins = {
 -- Install plugins and configure plugins
 require "tiny.pack" .setup(plugins, { do_config = true })
 ```
+
+## Environment Variables
+
+### `TINY_NVIM_CI`
+
+Set to `1` to tell Neovim it is being run in CI.
+
+At the moment, this means it will:
+
+- **not** prompt for user confirmation when installing plugins
+- **not** run build commands after plugins install
+- **not** run config functions after plugins install
+- stop executing after plugins are installed -- plugin config, keymaps etc will
+  not be set
