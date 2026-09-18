@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 export NVIM_APPNAME=tiny.nvim
 
 NVIM=${NVIM:-nvim}
+generated=$(mktemp)
 
-"$NVIM" -l scripts/type-check.lua 2>&1 | jq >generated.json
+trap 'rm -f "$generated"' EXIT
 
-emmylua_check . --config generated.json
+"$NVIM" -l scripts/type-check.lua | jq >"$generated"
 
-rm generated.json
+echo
+echo "--- generated.json ---"
+cat "$generated" | jq
+echo "--- end generated.json ---"
+
+emmylua_check . --config "$generated"

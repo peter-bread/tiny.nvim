@@ -1,8 +1,10 @@
--- Type check the config.
+-- Generate emmylua_ls config file to type check config.
+--
+-- Prints JSON string to stdout.
 --
 -- Usage:
 --
--- nvim -l ./foo.lua
+-- nvim -l scripts/type-check.lua
 --
 -- Parts of this are subject to change. For the type checking to work:
 -- - all plugins need to be installed and loaded, but not configured/setup
@@ -32,4 +34,4 @@ vim.lsp.enable { "emmylua_ls" }
 local config = vim.lsp.config["emmylua_ls"].settings.emmylua
 local json = vim.json.encode(config)
 
-vim.print(json)
+io.stdout:write(json, "\n")
