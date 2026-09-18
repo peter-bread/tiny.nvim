@@ -70,6 +70,14 @@ vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost"}, {
 
 -- TODO: Make sure sync and async plugin installation works.
 -- Sync is requried for bootstrap/headless scripts.
+--
+-- EDIT: Installation alone seems to work headlessly by default, but the build
+-- commands do not. May need wrap some things with vim.async so we have the
+-- option to do:
+--
+-- ```lua
+-- require "tiny.pack" .setup(plugins):wait()
+-- ```
 
 ---@type tiny.pack.Plugin[]
 local plugins = {
