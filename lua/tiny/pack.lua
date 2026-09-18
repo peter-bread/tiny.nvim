@@ -136,14 +136,14 @@ end
 
 --- Install plugins.
 ---@param specs tiny.pack.Spec[]
----@param config tiny.pack.Config
+---@param confirm boolean
 ---@private
-function M.add(specs, config)
+function M.add(specs, confirm)
   register_build_commands(specs)
 
   -- TODO: Maybe explicitly remove `build` field from specs?
   -- For now this is not an issue as it is ignored.
-  vim.pack.add(specs, { confirm = config.confirm })
+  vim.pack.add(specs, { confirm = confirm })
 end
 
 --- Run `config` functions.
@@ -219,15 +219,15 @@ local function resolve_config(opts)
 end
 
 ---@param plugins tiny.pack.Plugin[]
----@param config tiny.pack.Config
+---@param host_prefixes table<string, string>
 ---@return tiny.pack.Spec[]
-local function resolve_specs(plugins, config)
+local function resolve_specs(plugins, host_prefixes)
   vim.validate("plugins", plugins, vim.islist)
-  vim.validate("config", config, "table")
+  vim.validate("config", host_prefixes, "table")
 
   return vim.iter(plugins)
     :map(plugin_to_spec)
-    :map(function(spec) return expand_prefix(spec, config.host_prefixes) end)
+    :map(function(spec) return expand_prefix(spec, host_prefixes) end)
     :totable()
 end
 
@@ -239,9 +239,9 @@ function M.setup(plugins, opts)
   vim.validate("opts", opts, "table", true)
 
   local config = resolve_config(opts)
-  local specs = resolve_specs(plugins, config)
+  local specs = resolve_specs(plugins, config.host_prefixes)
 
-  M.add(specs, config)
+  M.add(specs, config.confirm)
 
   if config.do_config then
     M.config(specs)
