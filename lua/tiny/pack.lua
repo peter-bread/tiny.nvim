@@ -106,6 +106,8 @@ end
 ---@param plugin tiny.pack.Plugin
 ---@return tiny.pack.Spec
 local function plugin_to_spec(plugin)
+  vim.validate("plugin", plugin, { "table", "string" })
+
   if type(plugin) == "table" then return plugin end
   return { src = plugin }
 end
@@ -128,6 +130,8 @@ end
 --- Register build commands.
 ---@param specs tiny.pack.Spec[]
 local function register_build_commands(specs)
+  vim.validate("specs", specs, vim.islist)
+
   vim.iter(specs)
     :filter(function(spec) return spec.build end)
     :map(function(spec) return extract_name_from_spec(spec), spec.build end)
@@ -150,6 +154,8 @@ end
 ---@param specs tiny.pack.Spec[]
 ---@private
 function M.config(specs)
+  vim.validate("specs", specs, vim.islist)
+
   ---@diagnostic disable-next-line: access-invisible I think emmylua is getting confused.
   -- Related? https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/1244
   vim.iter(specs):each(function(spec)
