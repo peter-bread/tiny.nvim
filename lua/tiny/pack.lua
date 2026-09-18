@@ -151,6 +151,7 @@ end
 ---@private
 function M.config(specs)
   ---@diagnostic disable-next-line: access-invisible I think emmylua is getting confused.
+  -- Related? https://github.com/EmmyLuaLs/emmylua-analyzer-rust/issues/1244
   vim.iter(specs):each(function(spec)
     if spec.config and type(spec.config) == "function" then
       spec.config()
