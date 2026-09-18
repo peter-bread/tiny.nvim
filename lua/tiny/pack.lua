@@ -140,10 +140,17 @@ end
 
 --- Install plugins.
 ---@param specs tiny.pack.Spec[]
+---@param do_build boolean
 ---@param confirm boolean
 ---@private
-function M.add(specs, confirm)
-  register_build_commands(specs)
+function M.add(specs, do_build, confirm)
+  vim.validate("specs", specs, vim.islist)
+  vim.validate("do_build", do_build, "boolean")
+  vim.validate("confirm", confirm, "boolean")
+
+  if do_build then
+    register_build_commands(specs)
+  end
 
   -- TODO: Maybe explicitly remove `build` field from specs?
   -- For now this is not an issue as it is ignored.
@@ -201,6 +208,11 @@ end
 ---
 --- Mapping of short host prefixes to full host expansions.
 ---@field host_prefixes? table<string, string>
+---
+--- (default: `true`) Whether to run build commands after plugins are installed or updated.
+---
+--- You should only set this to `false` if you know what you are doing.
+---@field do_build? boolean
 
 --- Fully resolved configuration.
 ---@class (exact) tiny.pack.Config
@@ -214,7 +226,9 @@ local DEFAULT_CONFIG = {
     github = "https://github.com/",
     gitlab = "https://gitlab.com/",
     codeberg = "https://codeberg.org/",
-  }
+  },
+  ---@type boolean (default: `true`) Whether to run build commands after plugins are installed or updated.
+  do_build = true,
 }
 
 --- Merge user config with default config.
@@ -248,7 +262,7 @@ function M.setup(plugins, opts)
   local config = resolve_config(opts)
   local specs = resolve_specs(plugins, config.host_prefixes)
 
-  M.add(specs, config.confirm)
+  M.add(specs, config.do_build, config.confirm)
 
   if config.do_config then
     M.config(specs)
