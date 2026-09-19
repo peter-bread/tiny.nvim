@@ -22,6 +22,10 @@ jq <"$generated"
 echo "--- end generated.json ---"
 
 echo
-echo
 
-emmylua_check . --config "$generated"
+# if [[ ${CI:-} == "true" ]]; then
+if [[ ${GITHUB_ACTIONS:-} == "true" ]]; then
+  emmylua_check . --config "$generated" --output-format github
+else
+  emmylua_check . --config "$generated"
+fi
