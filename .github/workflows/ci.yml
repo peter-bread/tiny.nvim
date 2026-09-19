@@ -30,7 +30,8 @@ jobs:
           echo "$x"
           wget https://github.com/EmmyLuaLs/emmylua-analyzer-rust/releases/download/0.25.1/emmylua_check-linux-x64-glibc.2.17.tar.gz
           tar -xvf emmylua_check-linux-x64-glibc.2.17.tar.gz
-          mv emmylua_check "$x"
+          ./emmylua_check -h
+          mv ./emmylua_check "$x"
 
       - run: |
           # nvim --headless +qa
