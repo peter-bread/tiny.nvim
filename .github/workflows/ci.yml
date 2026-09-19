@@ -1,0 +1,19 @@
+---
+name: CI
+
+on:
+  push:
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+  type-check:
+    runs-on: ubuntu-latest
+    # env:
+    #   NVIM_APPNAME: "tiny.nvim"
+    #   XDG_CONFIG_HOME: ${{ github.workspace }}
+    #   TINY_NVIM_CI: "1"
+    steps:
+      # - uses: actions/checkout@v7
+      - run: echo "$XDG_CONFIG_HOME"
