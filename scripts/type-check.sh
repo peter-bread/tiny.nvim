@@ -14,11 +14,13 @@ trap 'rm -f "$generated" "$stderr"' EXIT
 
 cat "$stderr" >&2
 
-echo
-echo
+{
+  echo
+  echo
 
-echo "--- generated.json ---"
-cat "$generated" | jq
-echo "--- end generated.json ---"
+  echo "--- generated.json ---"
+  jq <"$generated"
+  echo "--- end generated.json ---"
+} &>2
 
 emmylua_check . --config "$generated"
