@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NVIM_APPNAME: "tiny.nvim"
-      # XDG_CONFIG_HOME: ${{ github.workspace }}
       TINY_NVIM_CI: "1"
     steps:
       - uses: actions/checkout@v7
@@ -22,11 +21,8 @@ jobs:
           neovim: true
           version: nightly
 
-      - run: |
-          echo "$GITHUB_WORKSPACE"
-          echo $(dirname "$GITHUB_WORKSPACE")
-          echo "$XDG_CONFIG_HOME"
-          export XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")
-          echo "$XDG_CONFIG_HOME"
+      - name: Set XDG_CONFIG_HOME
+        run: echo "XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")" >> "$GITHUB_ENV"
 
-          TINY_NVIM_CI=1 nvim --headless +qa
+      - run: |
+          nvim --headless +qa
