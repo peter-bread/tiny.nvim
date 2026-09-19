@@ -16,4 +16,6 @@ jobs:
     #   TINY_NVIM_CI: "1"
     steps:
       # - uses: actions/checkout@v7
-      - run: echo "$XDG_CONFIG_HOME"
+      - run: |
+          echo "$GITHUB_WORKSPACE"
+          echo "$XDG_CONFIG_HOME"
