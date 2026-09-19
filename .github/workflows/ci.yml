@@ -16,25 +16,32 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Set XDG_CONFIG_HOME
+        run: echo "XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")" >> "$GITHUB_ENV"
+
+      - name: Setup PATH
+        run: |
+          mkdir -p "$HOME/.local/bin"
+
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
           version: nightly
 
-      - name: Set XDG_CONFIG_HOME
-        run: echo "XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")" >> "$GITHUB_ENV"
+      - name: Prep
+        run: |
+          echo "URL=$FOO" >> "$GITHUB_ENV"
+          x=$(echo "$FOO" | cut -f9 -d/)
+          echo "TARBALL=$x" >> "$GITHUB_ENV"
+        env:
+          FOO: "https://github.com/EmmyLuaLs/emmylua-analyzer-rust/releases/download/0.25.1/emmylua_check-linux-x64-glibc.2.17.tar.gz"
 
       - name: Install emmylua_check
         run: |
-          x=$HOME/.local/bin
-          echo "$x"
-          mkdir -p "$x"
-          echo "$PATH" | tr ':' '\n'
-          wget https://github.com/EmmyLuaLs/emmylua-analyzer-rust/releases/download/0.25.1/emmylua_check-linux-x64-glibc.2.17.tar.gz
-          tar -xvf emmylua_check-linux-x64-glibc.2.17.tar.gz
-          ./emmylua_check -h
-          mv ./emmylua_check "$x"
-          ls -la "$x"
+          wget "$URL"
+          tar -xvf "$TARBALL"
+          emmylua_check -h
+          mv ./emmylua_check "$HOME/.local/bin"
 
       - run: |
           # nvim --headless +qa
