@@ -25,10 +25,14 @@ jobs:
       - name: Setup PATH
         run: mkdir -p "$HOME/.local/bin"
 
-      - uses: rhysd/action-setup-vim@v1
+      - name: Install nvim
+        uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
           version: ${{ matrix.neovim-version }}
+
+      - name: Print neovim version
+        run: nvim -V1 -v
 
       - name: Install emmylua_check
         run: |
@@ -39,6 +43,9 @@ jobs:
           EMMYLUA_VERSION: "0.25.1"
           EMMYLUA_ASSET: "emmylua_check-linux-x64-glibc.2.17.tar.gz"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print emmylua_check version
+        run: emmylua_check -V
 
       - name: Install nvim plugins
         run: nvim --headless +qa
