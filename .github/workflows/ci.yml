@@ -25,4 +25,5 @@ jobs:
         run: echo "XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")" >> "$GITHUB_ENV"
 
       - run: |
-          nvim --headless +qa
+          # nvim --headless +qa
+          ./scripts/type-check.sh
