@@ -12,15 +12,16 @@ trap 'rm -f "$generated" "$stderr"' EXIT
 
 "$NVIM" -l scripts/type-check.lua 2>"$stderr" | jq >"$generated"
 
-cat "$stderr" >&2
+cat "$stderr"
 
-{
-  echo
-  echo
+echo
+echo
 
-  echo "--- generated.json ---"
-  jq <"$generated"
-  echo "--- end generated.json ---"
-} &>2
+echo "--- generated.json ---"
+jq <"$generated"
+echo "--- end generated.json ---"
+
+echo
+echo
 
 emmylua_check . --config "$generated"
