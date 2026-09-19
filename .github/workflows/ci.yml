@@ -7,14 +7,15 @@ on:
 
   workflow_dispatch:
 
-# TODO: Run type-check on stable and nightly
-
 jobs:
   type-check:
     runs-on: ubuntu-latest
     env:
       NVIM_APPNAME: "tiny.nvim"
       TINY_NVIM_CI: "1"
+    strategy:
+      matrix:
+        neovim-version: [stable, nightly]
     steps:
       - uses: actions/checkout@v7
 
@@ -27,7 +28,7 @@ jobs:
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
-          version: nightly
+          version: ${{ matrix.neovim-version }}
 
       - name: Install emmylua_check
         run: |
