@@ -40,7 +40,7 @@ jobs:
         run: |
           wget "$URL"
           tar -xvf "$TARBALL"
-          emmylua_check -h
+          ./emmylua_check -h
           mv ./emmylua_check "$HOME/.local/bin"
 
       - run: |
