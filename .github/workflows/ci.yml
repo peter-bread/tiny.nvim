@@ -10,12 +10,15 @@ on:
 jobs:
   type-check:
     runs-on: ubuntu-latest
-    # env:
-    #   NVIM_APPNAME: "tiny.nvim"
-    #   XDG_CONFIG_HOME: ${{ github.workspace }}
-    #   TINY_NVIM_CI: "1"
+    env:
+      NVIM_APPNAME: "tiny.nvim"
+      # XDG_CONFIG_HOME: ${{ github.workspace }}
+      TINY_NVIM_CI: "1"
     steps:
       # - uses: actions/checkout@v7
       - run: |
           echo "$GITHUB_WORKSPACE"
+          echo $(dirname "$GITHUB_WORKSPACE")
+          echo "$XDG_CONFIG_HOME"
+          export XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")
           echo "$XDG_CONFIG_HOME"
