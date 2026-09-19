@@ -28,10 +28,10 @@ vim.lsp.config("emmylua_ls", {
   },
 })
 
-vim.lsp.enable { "emmylua_ls" }
-
 ---@diagnostic disable-next-line: need-check-nil
 local config = vim.lsp.config["emmylua_ls"].settings.emmylua
 local json = vim.json.encode(config)
 
+io.stderr:flush()
 io.stdout:write(json, "\n")
+io.stdout:flush()
