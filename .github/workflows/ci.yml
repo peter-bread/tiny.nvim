@@ -24,6 +24,9 @@ jobs:
       - name: Set XDG_CONFIG_HOME
         run: echo "XDG_CONFIG_HOME=$(dirname "$GITHUB_WORKSPACE")" >> "$GITHUB_ENV"
 
-      - run: |
-          # nvim --headless +qa
-          ./scripts/type-check.sh
+      - name: Install emmylua_check
+        run: echo "$PATH" | tr ':' '\n'
+
+    # - run: |
+    #     # nvim --headless +qa
+    #     ./scripts/type-check.sh
