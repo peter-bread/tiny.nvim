@@ -32,7 +32,8 @@ jobs:
       - name: Install emmylua_check
         run: |
           gh release download -R EmmyLuaLs/emmylua-analyzer-rust "$EMMYLUA_VERSION" -p "$EMMYLUA_ASSET"
-          mv "$EMMYLUA_ASSET" "$HOME/.local/bin"
+          tar -xf "$EMMYLUA_ASSET"
+          mv ./emmylua_check "$HOME/.local/bin"
         env:
           EMMYLUA_VERSION: "0.25.1"
           EMMYLUA_ASSET: "emmylua_check-linux-x64-glibc.2.17.tar.gz"
