@@ -7,6 +7,9 @@ end
 
 -- 1. OPTIONS ==========================================================================================================
 
+-- Enable faster startup by caching compiled Lua modules
+vim.loader.enable()
+
 vim.g.mapleader       = " "
 vim.g.maplocalleader  = "\\"
 
