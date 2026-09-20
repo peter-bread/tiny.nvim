@@ -14,6 +14,7 @@ jobs:
       NVIM_APPNAME: "tiny.nvim"
       TINY_NVIM_CI: "1"
     strategy:
+      fail-fast: false
       matrix:
         neovim-version: [stable, nightly]
     steps:
