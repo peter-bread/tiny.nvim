@@ -1,8 +1,7 @@
 -- 0. CHECKS ===========================================================================================================
 
--- nvim 0.12 is required for `vim.pack`.
-if vim.fn.has "nvim-0.12" == 0 then
-  error "[ERROR] Requires nvim 0.12"
+if vim.fn.has "nvim-0.13" == 0 then
+  error "requires nvim 0.13"
 end
 
 
