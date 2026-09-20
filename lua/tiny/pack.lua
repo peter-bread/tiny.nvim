@@ -98,10 +98,10 @@ end
 ---
 --- ```lua
 --- plugin_to_spec("some-plugin")
----  -- {  src = "some-plugin" }
+---  -- { src = "some-plugin" }
 ---
 --- plugin_to_spec({ src = "some-plugin" })
----  -- {  src = "some-plugin" }
+---  -- { src = "some-plugin" }
 --- ```
 ---@param plugin tiny.pack.Plugin
 ---@return tiny.pack.Spec
