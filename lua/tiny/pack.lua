@@ -54,7 +54,7 @@ local build_group = vim.api.nvim_create_augroup("tiny.pack.build", {})
 local function register_build_command(name, build)
   -- TODO: Should we specify non-empty string?
   vim.validate("name", name, "string")
-  vim.validate("fn", build, { "string", "function" })
+  vim.validate("build", build, { "string", "function" })
 
   vim.api.nvim_create_autocmd("PackChanged", {
     group = build_group,
@@ -244,7 +244,7 @@ end
 ---@return tiny.pack.Spec[]
 local function resolve_specs(plugins, host_prefixes)
   vim.validate("plugins", plugins, vim.islist)
-  vim.validate("config", host_prefixes, "table")
+  vim.validate("host_prefixes", host_prefixes, "table")
 
   return vim.iter(plugins)
     :map(plugin_to_spec)
