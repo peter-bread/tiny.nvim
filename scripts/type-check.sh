@@ -10,12 +10,16 @@ stderr=$(mktemp)
 
 trap 'rm -f "$generated" "$stderr"' EXIT
 
-"$NVIM" -l scripts/type-check.lua 2>"$stderr" | jq >"$generated"
+"$NVIM" -l scripts/type-check.lua 2>"$stderr" | jq >"$generated" || {
+  echo "Error: could not generate emmylua config file"
+  cat "$stderr"
+  exit 1
+} >&2
 
-cat "$stderr"
-
-echo
-echo
+# cat "$stderr"
+#
+# echo
+# echo
 
 echo "--- generated.json ---"
 jq <"$generated"
