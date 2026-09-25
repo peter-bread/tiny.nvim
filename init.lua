@@ -96,21 +96,101 @@ local plugins = {
   {
     src = "github:rebelot/kanagawa.nvim",
     config = function()
+      -- Based on GitHub Colorblind Dark Mode Hex Tokens
+      -- stylua: ignore
+      local gh = {
+        -- 1. Base 4 Colors
+        add_bg        = "#15223a", -- Add line background
+        add_inline_bg = "#234d87", -- Add word/inline background
+        del_bg        = "#2c201b", -- Delete line background
+        del_inline_bg = "#733d22", -- Delete word/inline background
+
+        -- 2. GitHub Dark Mode Accents (for text/signs)
+        add_fg = "#539bf5", -- GitHub blue text
+        del_fg = "#e36049", -- GitHub orange/red text
+
+        -- 3. Derived Cursor Line Backgrounds (halfway between line_bg and inline_bg)
+        add_cursor_bg = "#1b2c4a",
+        del_cursor_bg = "#382923",
+      }
+
+      -- local wave = require "kanagawa.colors" .setup { theme = "wave" }
+      -- local theme = wave.theme
+      -- local palette = wave.palette
+
       ---@diagnostic disable-next-line
       require "kanagawa" .setup {
-        colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
+        colors = {
+          theme = {
+            all = { ui = { bg_gutter = "none" } },
+            wave = {
+              -- diff filetype, *.diff / *.patch files
+              -- e.g. hl groups: diffAdded, diffNewFile, @diff.plus
+              vcs = {
+                added   = gh.add_fg,
+                removed = gh.del_fg,
+              },
+              -- vimdiff, and (presumably) other diff plugins
+              -- e.g. hl groups: DiffAdd
+              diff = {
+                add    = gh.add_bg,
+                delete = gh.del_bg,
+                -- change = ...
+                -- text   = ...
+              },
+            },
+          },
+        },
 
         ---@param colors KanagawaColors
         overrides = function(colors)
           local theme = colors.theme
+          -- local palette = colors.palette
 
-          return {
-            -- Dark popup menus
+          -- We can also use
+          -- require("kanagawa.lib.color")
+          -- for advanced color mixing.
+
+          local dark_popup_menus = {
             Pmenu       = {               bg = theme.ui.bg_p1 },
             PmenuSel    = { fg = "NONE",  bg = theme.ui.bg_p2 },
             PmenuSbar   = {               bg = theme.ui.bg_m1 },
             PmenuThumb  = {               bg = theme.ui.bg_p2 },
           }
+
+          -- Neogit diff highlights.
+          --
+          -- For reference, these are the defaults:
+          --  NeogitDiffAdditions            = { fg = palette.bg_green, ctermfg = 2 },
+          --  NeogitDiffAdd                  = { bg = palette.line_green, fg = palette.bg_green, ctermfg = 2 },
+          --  NeogitDiffAddHighlight         = { bg = palette.line_green, fg = palette.green, ctermfg = 2 },
+          --  NeogitDiffAddCursor            = { bg = palette.bg1, fg = palette.green, ctermfg = 2 },
+          --  NeogitDiffDeletions            = { fg = palette.bg_red, ctermfg = 1 },
+          --  NeogitDiffDelete               = { bg = palette.line_red, fg = palette.bg_red, ctermfg = 1 },
+          --  NeogitDiffDeleteHighlight      = { bg = palette.line_red, fg = palette.red, ctermfg = 1 },
+          --  NeogitDiffDeleteCursor         = { bg = palette.bg1, fg = palette.red, ctermfg = 1 },
+          --  NeogitDiffAddInline            = { bg = palette.inline_green, fg = palette.line_green, bold = palette.bold },
+          --  NeogitDiffDeleteInline         = { bg = palette.inline_red, fg = palette.bg0, bold = palette.bold },
+          local neogit_diff = {
+            NeogitDiffAdd             = { bg = gh.add_bg },
+            NeogitDiffAdditions       = { fg = gh.add_fg, bg = gh.add_bg },
+            NeogitDiffAddHighlight    = { bg = gh.add_bg },
+            NeogitDiffAddCursor       = { bg = gh.add_cursor_bg, bold = true },
+            NeogitDiffAddInline       = { bg = gh.add_inline_bg, bold = true },
+
+            NeogitDiffDelete          = { bg = gh.del_bg },
+            NeogitDiffDeletions       = { fg = gh.del_fg, bg = gh.del_bg },
+            NeogitDiffDeleteHighlight = { bg = gh.del_bg },
+            NeogitDiffDeleteCursor    = { bg = gh.del_cursor_bg, bold = true },
+            NeogitDiffDeleteInline    = { bg = gh.del_inline_bg, bold = true },
+          }
+
+          return vim.tbl_extend(
+            "force",
+            {},
+            dark_popup_menus,
+            neogit_diff
+          )
         end,
       }
 
