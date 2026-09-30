@@ -29,7 +29,10 @@
 ---       etc.
 ---@field build? tiny.pack.BuildCommand
 ---
---- Config function to run after plugins are installed.
+---Funtion that runs before plugins are installed and loaded.
+---@field init? fun()
+---
+--- Config function to run after plugins are installed and loaded.
 --- TODO: Pass in some kind of context, `opts` field or similar if that gets
 ---       implemented
 ---@field config? fun()
@@ -213,6 +216,9 @@ end
 ---
 --- You should only set this to `false` if you know what you are doing.
 ---@field do_build? boolean
+---
+--- (default: `false`) Whether to run `init` functions if they exist.
+---@field do_init? boolean
 
 --- Fully resolved configuration.
 ---@class (exact) tiny.pack.Config
@@ -229,6 +235,8 @@ local DEFAULT_CONFIG = {
   },
   ---@type boolean (default: `true`) Whether to run build commands after plugins are installed or updated.
   do_build = true,
+  ---@type boolean (default: `false`) Whether to run `init` functions if they exist.
+  do_init = false
 }
 
 --- Merge user config with default config.
@@ -261,6 +269,14 @@ function M.setup(plugins, opts)
 
   local config = resolve_config(opts)
   local specs = resolve_specs(plugins, config.host_prefixes)
+
+  if config.do_init then
+    vim.iter(specs):each(function(spec)
+      if spec.init and type(spec.init) == "function" then
+        spec.init()
+      end
+    end)
+  end
 
   M.add(specs, config.do_build, config.confirm)
 

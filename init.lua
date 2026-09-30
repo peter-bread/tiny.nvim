@@ -239,7 +239,7 @@ if vim.env.TINY_NVIM_CI == "1" then
 end
 
 -- Setup plugins
-require "tiny.pack" .setup(plugins, { do_config = true })
+require "tiny.pack" .setup(plugins, { do_init = true, do_config = true })
 
 
 -- 3. PLUGIN SETUP =====================================================================================================
