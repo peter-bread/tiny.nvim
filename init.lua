@@ -57,9 +57,9 @@ vim.o.wrap            = false
 -- 1.1. MORE CONFIG ======================================================================================================
 -- TODO: Work out a better place to put this.
 
-require("vim._core.ui2").enable({})
+require "vim._core.ui2" .enable {}
 
-vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost"}, {
+vim.api.nvim_create_autocmd({ "TextYankPost", "TextPutPost" }, {
   desc = "Highlight on yank and put",
   group = vim.api.nvim_create_augroup("tiny.hl", {}),
   callback = function()
