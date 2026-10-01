@@ -172,17 +172,17 @@ local plugins = {
           --  NeogitDiffAddInline            = { bg = palette.inline_green, fg = palette.line_green, bold = palette.bold },
           --  NeogitDiffDeleteInline         = { bg = palette.inline_red, fg = palette.bg0, bold = palette.bold },
           local neogit_diff = {
-            NeogitDiffAdd             = { bg = gh.add_bg },
-            NeogitDiffAdditions       = { fg = gh.add_fg, bg = gh.add_bg },
-            NeogitDiffAddHighlight    = { bg = gh.add_bg },
-            NeogitDiffAddCursor       = { bg = gh.add_cursor_bg, bold = true },
-            NeogitDiffAddInline       = { bg = gh.add_inline_bg, bold = true },
+            NeogitDiffAdd             = {                 bg = gh.add_bg                     },
+            NeogitDiffAdditions       = { fg = gh.add_fg, bg = gh.add_bg                     },
+            NeogitDiffAddHighlight    = {                 bg = gh.add_bg                     },
+            NeogitDiffAddCursor       = {                 bg = gh.add_cursor_bg, bold = true },
+            NeogitDiffAddInline       = {                 bg = gh.add_inline_bg, bold = true },
 
-            NeogitDiffDelete          = { bg = gh.del_bg },
-            NeogitDiffDeletions       = { fg = gh.del_fg, bg = gh.del_bg },
-            NeogitDiffDeleteHighlight = { bg = gh.del_bg },
-            NeogitDiffDeleteCursor    = { bg = gh.del_cursor_bg, bold = true },
-            NeogitDiffDeleteInline    = { bg = gh.del_inline_bg, bold = true },
+            NeogitDiffDelete          = {                 bg = gh.del_bg                     },
+            NeogitDiffDeletions       = { fg = gh.del_fg, bg = gh.del_bg                     },
+            NeogitDiffDeleteHighlight = {                 bg = gh.del_bg                     },
+            NeogitDiffDeleteCursor    = {                 bg = gh.del_cursor_bg, bold = true },
+            NeogitDiffDeleteInline    = {                 bg = gh.del_inline_bg, bold = true },
           }
 
           return vim.tbl_extend(
